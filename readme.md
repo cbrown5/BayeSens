@@ -5,3 +5,5 @@ The package HellingerMCMC provides functions for non-parametric calculation of t
 To install this package open R and type:
 `install.packages("devtools")`  
 `devtools::install_github("cbrown5/BayeSens")`  
+
+Thanks to Ed Boone and Ben Stewart-Koster for their help with the stats in this package.  
