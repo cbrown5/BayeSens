@@ -2,5 +2,5 @@
 .Rhistory
 .RData
 data-raw
-vignettes
+inst/doc
 BayeSens.Rproj
