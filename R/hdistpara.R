@@ -29,7 +29,7 @@
 #' the discrete and continuous distribution fits. It is recommended to
 #' visually check distribution fits, particularly if the number of random
 #' variates is small.
-#' 
+#'
 #' In general these methods will be inaccurate if analysis is performed on too
 #' few samples, e.g. <10 000. >100 000 would be ideal.
 #' @author Christopher J. Brown christo.j.brown@gmail.com
