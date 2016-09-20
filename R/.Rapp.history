@@ -1,0 +1,93 @@
+# Test prior sensitivity #
+#CJ Brown 15 Sept 2016#
+#
+rm(list = ls())#
+#
+library(devtools)#
+#
+load_all('~/Code/isotope mixing models/BayeSens')#
+#
+##
+# test betas
+r1 <- rbeta(10000, 4, 1)#
+   r2 <- rbeta(10000, 3, 3)#
+#
+hout <- hellinger(r1, r2, nbreaks = 100)#
+hout#
+plot(hout)
+houtp <- hdistpara(r1, r2, densfun = 'beta')#
+hdistpara(r1, r2, densfun = 'normal')
+r2
+houtp <- hdistpara(r1, r2, densfun = 'beta')
+houtp
+hdistpara(r1, r2, densfun = 'normal')
+# Test prior sensitivity #
+#CJ Brown 15 Sept 2016#
+#
+rm(list = ls())#
+#
+library(devtools)#
+#
+load_all('~/Code/isotope mixing models/BayeSens')#
+#
+##
+# test betas#
+##
+#
+   r1 <- rbeta(10000, 4, 1)#
+   r2 <- rbeta(10000, 3, 3)#
+#
+hout <- hellinger(r1, r2, nbreaks = 100)#
+hout#
+plot(hout)#
+#
+houtp <- hdistpara(r1, r2, densfun = 'beta')#
+hdistpara(r1, r2, densfun = 'normal')
+plot(houtp)
+houtp
+hdistpara(r1, params = c(3,3), densfun = 'normal')
+plot(houtp)
+houtp <- hdistpara(r1, params = c(3,3), densfun = 'normal')
+plot(houtp)
+houtp <- hdistpara(r1, params = c(3,3), densfun = 'beta')
+houtp
+hdistpara(r1, r2, densfun = 'normal')
+houtp <- hdistpara(r1, r2, densfun = 'beta')
+houtp
+houtp <- hdistpara(r1, params = c(3,3), densfun = 'beta')
+plot(houtp)
+houtp <- hdistpara(r1, params = c(3,3), densfun = 'beta')
+plot(houtp)
+str(houtp)
+helldist <- houtp
+helldist$distnam == 'normal'
+helldist$distnam == 'beta'
+d1 <- dbeta(x, shape1 = helldist$densities$d1$estimate[1],
+shape2 = helldist$densities$d1$estimate[2])
+# Test prior sensitivity #
+#CJ Brown 15 Sept 2016#
+#
+rm(list = ls())#
+#
+library(devtools)#
+#
+load_all('~/Code/isotope mixing models/BayeSens')#
+#
+##
+# test betas#
+##
+#
+   r1 <- rbeta(10000, 4, 1)#
+   r2 <- rbeta(10000, 3, 3)#
+#
+hout <- hellinger(r1, r2, nbreaks = 100)#
+hout#
+plot(hout)#
+#
+houtp <- hdistpara(r1, r2, densfun = 'beta')#
+hdistpara(r1, r2, densfun = 'normal')#
+houtp <- hdistpara(r1, params = c(3,3), densfun = 'beta')
+houtp
+hdistpara(r1, r2, densfun = 'beta')
+hdistpara(r1, params = c(3,3), densfun = 'beta')
+plot(houtp)
