@@ -72,7 +72,7 @@ plot(houtp)
 
 Another method for prior sensitivity analysis is to calculate posterior shrinkage, that is how much a posterior estimate has shrunk towards its maximum likelihood value. Posterior shrinkage is the estimate of $\alpha$ in:  
 
-$\theta_D = \alpha \theta_p + (1 - \alpha) \theta_{MLE}$  
+$\theta_D = (1 - \alpha) \theta_p + \alpha \theta_{MLE}$  
 
 The function simply takes three estimates of a parameter, e.g. 
 
@@ -80,11 +80,11 @@ The function simply takes three estimates of a parameter, e.g.
 postshrink(thetaprior = 0.1, thetapost = 0.2, thetaMLE = 0.22)
 ```  
 
-Values close to zero indicate the prior has little influence on the posterior, whereas values close to 1 indicate the prior has a large influence on the posterior.  
+Values close to 1 indicate the prior has little influence on the posterior, whereas values close to zero indicate the prior has a large influence on the posterior.  
 
 Some care must be taken in selecting parameter estimates to use in the shrink equation and also in estimating the MLE (which is not alwaysstraightfoward). For complex models the MLE may be estimated using data cloning, see below.  
 
-Shrink values can occaisionally be negative. Negative values occur when the posterior parameter estimate has moved in the opposite direction from the prior than the MLE. Negative values can occur if 
+Shrink values can occaisionally be >1. Values >1 occur when the posterior parameter estimate has moved in the opposite direction from the prior than the MLE. Values >1 can occur if 
 (1) your MLE estimate inaccurate, (2) your posterior is multi-model, or (3) your posterior estimate is constrained by other parameters  
 
 If (1) then try other methods for obtaining an MLE or increase replication if using data cloning.  

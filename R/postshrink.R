@@ -15,8 +15,8 @@
 #'estimate has shrunk towards the maximum likelihood estimate and away from the
 #'prior.
 #'
-#'Values close to zero indicate the prior has little influence on the
-#'posterior, whereas values close to 1 indicate the prior has a large
+#'Values close to 1 indicate the prior has little influence on the
+#'posterior, whereas values close to 0 indicate the prior has a large
 #'influence on the posterior.
 #'
 #' Some care must be taken in selecting parameter estimates to use in the
@@ -24,9 +24,9 @@
 #'straightfoward). For complex models the MLE may be estiamted using data
 #'cloning, see \code{\link{dataclone}}.
 #'
-#' Shrink values can occaisionally be negative. Negative values occur when
+#' Shrink values can occaisionally be >1. Values >1 occur when
 #'the posterior parameter estimate has moved in the opposite direction from
-#'the prior than the MLE. Negative values can occur if (1) your MLE estimate
+#'the prior than the MLE.  Values >1 can occur if (1) your MLE estimate
 #'is inaccurate, (2) your posterior is multi-model, or (3) your posterior
 #'estimate is constrained by other parameters. If (1) then try other methods
 #'for obtaining an MLE or increase replication if using data cloning.
@@ -43,5 +43,5 @@
 #' @export
 
 postshrink <- function(thetaprior, thetapost, thetaMLE){
-		(thetaMLE - thetapost)/(thetaMLE - thetaprior)
+		(theta_post - theta_prior)/(theta_MLE - theta_prior)
 		}
