@@ -84,7 +84,10 @@ Values close to 1 indicate the prior has little influence on the posterior, wher
 
 Some care must be taken in selecting parameter estimates to use in the shrink equation and also in estimating the MLE (which is not alwaysstraightfoward). For complex models the MLE may be estimated using data cloning, see below.  
 
-Shrink values can occaisionally be >1. Values >1 occur when the posterior parameter estimate has moved in the opposite direction from the prior than the MLE. Values >1 can occur if 
+Shrink values can occaisionally be >1 or <0. Values <0 occur when the posterior parameter estimate has moved in the opposite direction from the prior than the MLE.  
+Values >1 occur when the MLE is closer to the prior estimate than
+the posterior.
+Values not in 0-1 can occur if 
 (1) your MLE estimate inaccurate, (2) your posterior is multi-model, or (3) your posterior estimate is constrained by other parameters  
 
 If (1) then try other methods for obtaining an MLE or increase replication if using data cloning.  
