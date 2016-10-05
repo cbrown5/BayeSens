@@ -6,7 +6,7 @@ Date: 2016-09-19
 Author: Christopher J. Brown
 Maintainer: CJ Brown <christo.j.brown@gmail.com>
 Description: Calculate Hellinger distances on MCMC chains, calculate posterior shrinkage.
-License: GPL-3
+License: MIT + file LICENSE
 RoxygenNote: 5.0.1
 Suggests: knitr,
     rmarkdown
