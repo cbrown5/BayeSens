@@ -6,6 +6,11 @@ To install this package open R and type:
 `install.packages("devtools")`  
 `devtools::install_github("cbrown5/BayeSens")`  
 
+Or if you want the vignettes:
+
+`devtools::install_github("cbrown5/BayeSens", build_vignettes = TRUE)`  
+(this option requires running a couple of mixing models, but they are short runs)
+
 To get started check out the vignette: 
 `vignette("BayeSens")`
 
