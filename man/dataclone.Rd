@@ -32,4 +32,3 @@ Carlo methods. Ecology letters. 2007 Jul 1;10(7):551-63.
 \author{
 Christopher J. Brown christo.j.brown@gmail.com
 }
-

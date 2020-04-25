@@ -4,8 +4,7 @@
 \alias{hellinger}
 \title{Estimate the Hellinger distance between two random variates}
 \usage{
-hellinger(x1, x2, nbreaks = 100, minx = min(c(x1, x2)), maxx = max(c(x1,
-  x2)))
+hellinger(x1, x2, nbreaks = 100, minx = min(c(x1, x2)), maxx = max(c(x1, x2)))
 }
 \arguments{
 \item{x1}{A \code{numeric} random variate of draws from the first distribution}
@@ -57,4 +56,3 @@ too few samples, e.g. <10 000. >100 000 would be ideal.
 \author{
 Christopher J. Brown christo.j.brown@gmail.com
 }
-

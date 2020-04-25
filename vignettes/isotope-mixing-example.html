@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="CJ Brown" />
+
+<meta name="date" content="2020-04-25" />
+
+<title>Example for isotope mixing models</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Example for isotope mixing models</h1>
+<h4 class="author">CJ Brown</h4>
+<h4 class="date">2020-04-25</h4>
+
+
+
+<div id="example-for-isotope-mixing-models" class="section level1">
+<h1>Example for isotope mixing models</h1>
+<p>This vignette demonstrates how information criteria can be calculated for mixing models, specically models fit with <a href="https://cran.r-project.org/web/packages/MixSIAR/index.html">MixSIAR</a>.</p>
+<p>In the article <a href="https://link.springer.com/article/10.1007/s00442-018-4138-y">“Quantifying learning in biotracer studies” (Brown,et al. Oecologia 2018)</a> we describe how comparing priors and posteriors with information criteria is important to determine the influence of the data on the model. Priors for mixing models are all informative, even so called ‘uninformative’ priors. The prior for source contributions bounded between 0-1, and source contributions must sum to 1, so it can never be truly flat in that range.</p>
+<p>We will apply the simple marginal information criteria from that paper to the Killer Whale example, see <code>vignette(&quot;killerwhale_ex&quot;)</code> in MixSIAR.</p>
+<p>The killer whale example is a nice simple one with no covariates or random effects. If you have covariates or random effects, you’ll need to be careful to compare priors to posteriors at the same locations on the fixed/random effects.</p>
+<p>It will be helpful to have some understanding of MixSIAR’s data structures, because we need to find the posterior samples in the model output.</p>
+<div id="killer-whale-example" class="section level2">
+<h2>Killer whale example</h2>
+<p>First load the packages we need:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(BayeSens)
+<span class="kw">library</span>(MixSIAR)</code></pre></div>
+<pre><code>## Warning: package 'MixSIAR' was built under R version 3.6.3</code></pre>
+<p>Now load the data (this is verbatim from the Killer whale example).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mix.filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;killerwhale_consumer.csv&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;MixSIAR&quot;</span>)
+
+mix &lt;-<span class="st"> </span><span class="kw">load_mix_data</span>(<span class="dt">filename=</span>mix.filename,
+                     <span class="dt">iso_names=</span><span class="kw">c</span>(<span class="st">&quot;d13C&quot;</span>,<span class="st">&quot;d15N&quot;</span>),
+                     <span class="dt">factors=</span><span class="ot">NULL</span>,
+                     <span class="dt">fac_random=</span><span class="ot">NULL</span>,
+                     <span class="dt">fac_nested=</span><span class="ot">NULL</span>,
+                     <span class="dt">cont_effects=</span><span class="ot">NULL</span>)
+
+
+source.filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;killerwhale_sources.csv&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;MixSIAR&quot;</span>)
+
+source &lt;-<span class="st"> </span><span class="kw">load_source_data</span>(<span class="dt">filename=</span>source.filename,
+                           <span class="dt">source_factors=</span><span class="ot">NULL</span>,
+                           <span class="dt">conc_dep=</span><span class="ot">FALSE</span>,
+                           <span class="dt">data_type=</span><span class="st">&quot;means&quot;</span>,
+                           mix)
+
+discr.filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;killerwhale_discrimination.csv&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;MixSIAR&quot;</span>)
+
+discr &lt;-<span class="st"> </span><span class="kw">load_discr_data</span>(<span class="dt">filename=</span>discr.filename, mix)</code></pre></div>
+</div>
+<div id="draw-samples-from-the-prior" class="section level2">
+<h2>Draw samples from the prior</h2>
+<p>Let’s draw samples from the prior. You can also plot this with MixSIAR’s <code>plot_prior</code> function, but we need a matrix of the samples for calculating info criteria later.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alpha &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, source<span class="op">$</span>n.sources) <span class="co">#default prior values</span>
+p_prior &lt;-<span class="st"> </span>MCMCpack<span class="op">::</span><span class="kw">rdirichlet</span>(<span class="dv">10000</span>, alpha) <span class="co">#draw prior samples </span></code></pre></div>
+<p>Let’s plot just the prior for the first source (since they are all the same in this case)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Plot histogram and density (same data, different ways to view it )</span>
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">hist</span>(p_prior[,<span class="dv">1</span>], <span class="dv">20</span>, <span class="dt">main =</span> source<span class="op">$</span>source_names[<span class="dv">1</span>])
+<span class="kw">plot</span>(<span class="kw">density</span>(p_prior[,<span class="dv">1</span>]), <span class="dt">main =</span> source<span class="op">$</span>source_names[<span class="dv">1</span>])
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="dv">1</span><span class="op">/</span>source<span class="op">$</span>n.sources)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>As you can see the default prior clearly isn’t ‘uninformative’ because it is centred around 1/number of sources (in fact it has mean 1 over the number of sources). It might be better called the ‘uninformed’ (by the user) prior. This means the prior will have a lower mean the more sources you include in the model.</p>
+</div>
+<div id="run-the-model" class="section level2">
+<h2>Run the model</h2>
+<p>This is verbatim from the Killer Whales example.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_filename &lt;-<span class="st"> &quot;MixSIAR_model_kw_uninf.txt&quot;</span>   <span class="co"># Name of the JAGS model file</span>
+resid_err &lt;-<span class="st"> </span><span class="ot">TRUE</span>
+process_err &lt;-<span class="st"> </span><span class="ot">TRUE</span>
+<span class="kw">write_JAGS_model</span>(model_filename, resid_err, process_err, mix, source)
+jags.uninf &lt;-<span class="st"> </span><span class="kw">run_model</span>(<span class="dt">run=</span><span class="st">&quot;test&quot;</span>,mix,source,discr,model_filename,<span class="dt">alpha.prior =</span> alpha, resid_err, process_err)</code></pre></div>
+<pre><code>## module glm loaded</code></pre>
+<pre><code>## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 12
+##    Unobserved stochastic nodes: 23
+##    Total graph size: 766
+## 
+## Initializing model</code></pre>
+<p>I’ve used the test run mode here just to speed things up for the example.</p>
+<p>You should absolutely use long chains (e.g. <code>run = &quot;long&quot;</code>) when calculating info criteria. They are quite sensitive to the number of MCMC samples if there are few samples. We need enough samples to get a good idea of the posteriors full shape.</p>
+<p>If you get errors below (e.g. about ‘extremely bad integrand’) that means you haven’t used enough samples to properly fill out the posterior.</p>
+</div>
+<div id="extract-samples" class="section level2">
+<h2>Extract samples</h2>
+<p>Here’s where it helps to have some idea of how MixSIAR structures outputs. We need to find the posterior samples. You can dig around using <code>str(jags.uninf)</code>. I did that and found the samples under <code>jags.uninf$BUGSoutput</code> as below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p_post &lt;-<span class="st"> </span>jags.uninf<span class="op">$</span>BUGSoutput<span class="op">$</span>sims.list<span class="op">$</span>p.global</code></pre></div>
+<p>Now we have a matrix of prior samples and a matrix of posterior samples we can just compare them with the <code>hellinger</code> or <code>kldiv</code> (Kullback-Leibler divergence) functions from <code>BayeSens</code>. I’ll compare just the first source (Chinook salmon).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hellinger</span>(p_prior[,<span class="dv">1</span>], p_post[,<span class="dv">1</span>])</code></pre></div>
+<pre><code>## Hellinger distance - continuous 
+## [1] 0.5
+## 
+##  Hellinger distance - discrete 
+## [1] 0.56</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kldiv</span>(p_prior[,<span class="dv">1</span>], p_post[,<span class="dv">1</span>])</code></pre></div>
+<pre><code>## Kullback-Leibler divergence 
+## [1] 4.3</code></pre>
+<p>We’d like to know what the info criteria are for all sources, so we could manually select columns to compare, or just use some sort of iterating function to do them all at once. Here I use <code>lapply</code> and put them into a dataframe:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hell_out &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>source<span class="op">$</span>n.sources, <span class="cf">function</span>(i) <span class="kw">hellinger</span>(p_prior[,i], p_post[,i])<span class="op">$</span>hdist_disc)
+kl_out &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>source<span class="op">$</span>n.sources, <span class="cf">function</span>(i) <span class="kw">kldiv</span>(p_prior[,i], p_post[,i])<span class="op">$</span>kd)
+info_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">source_names =</span> source<span class="op">$</span>source_names, 
+                      <span class="dt">hellinger =</span> <span class="kw">unlist</span>(hell_out),
+                      <span class="dt">KLD =</span> <span class="kw">unlist</span>(kl_out))
+info_df</code></pre></div>
+<pre><code>##   source_names hellinger      KLD
+## 1      Chinook 0.5647238 4.272721
+## 2         Chum 0.4963925 3.322687
+## 3         Coho 0.3477712 1.280238
+## 4      Sockeye 0.3596649 1.536300
+## 5    Steelhead 0.4419559 1.786828</code></pre>
+<p>Hellinger values near 0 are very similar to the priors, Hellinger values near 1 are very different to the priors. The KLD ranges from &gt;0 to infinity, so greater values indicate greater differences from the prior. So these results indicate to us that the model and data are not very informative about Coho, but much more informative about Chinook. To interpret why this is you should plot the priors and posteriors.</p>
+<p>You can use <code>output_JAGS</code> to do this. We will do it ourselves, just to practice data wrangling. For Chinook and Coho:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">plot</span>(<span class="kw">density</span>(p_post[,<span class="dv">1</span>]), <span class="dt">main =</span> source<span class="op">$</span>source_names[<span class="dv">1</span>])
+<span class="kw">lines</span>(<span class="kw">density</span>(p_prior[,<span class="dv">1</span>]), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="dv">1</span><span class="op">/</span>source<span class="op">$</span>n.sources, <span class="dt">lty =</span> <span class="dv">2</span>)
+
+<span class="kw">plot</span>(<span class="kw">density</span>(p_post[,<span class="dv">3</span>]), <span class="dt">main =</span> source<span class="op">$</span>source_names[<span class="dv">3</span>])
+<span class="kw">lines</span>(<span class="kw">density</span>(p_prior[,<span class="dv">3</span>]), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="dv">1</span><span class="op">/</span>source<span class="op">$</span>n.sources, <span class="dt">lty =</span> <span class="dv">2</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>It is pretty clear that contributions for Chinook have shifted higher, whereas the data doesn’t give us much reason to believe Coho are any more important than the prior suggested.</p>
+<p>Note that you can also get high information criteria stats if the posterior mean stays the same as the prior’s mean, but the distribution changes shape (e.g. gets thinner). For instance, if the data were strongly informative that Coho were not an important food source, then we could have the same posterior mean of 0.2, but the uncertainty intervals would be much narrower around 0.2 than in the prior.</p>
+</div>
+<div id="informative-priors" class="section level2">
+<h2>Informative priors</h2>
+<p>The killer whale example also gives a model fit with informed priors. Here’s the code verbatim from MixSIAR:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">kw.alpha &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">3</span>)
+kw.alpha &lt;-<span class="st"> </span>kw.alpha<span class="op">*</span><span class="kw">length</span>(kw.alpha)<span class="op">/</span><span class="kw">sum</span>(kw.alpha)
+kw.alpha[<span class="kw">which</span>(kw.alpha<span class="op">==</span><span class="dv">0</span>)] &lt;-<span class="st"> </span><span class="fl">0.01</span>
+model_filename &lt;-<span class="st"> &quot;MixSIAR_model_kw_inf.txt&quot;</span>  
+resid_err &lt;-<span class="st"> </span><span class="ot">TRUE</span>
+process_err &lt;-<span class="st"> </span><span class="ot">TRUE</span>
+<span class="kw">write_JAGS_model</span>(model_filename, resid_err, process_err, mix, source)
+jags.inf &lt;-<span class="st"> </span><span class="kw">run_model</span>(<span class="dt">run=</span><span class="st">&quot;test&quot;</span>,mix,source,discr,model_filename,<span class="dt">alpha.prior=</span>kw.alpha, resid_err, process_err)</code></pre></div>
+<pre><code>## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 12
+##    Unobserved stochastic nodes: 23
+##    Total graph size: 766
+## 
+## Initializing model</code></pre>
+<p>The only extra step we need to do now is draw samples from the prior and posteriors:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p_prior_inf &lt;-<span class="st"> </span>MCMCpack<span class="op">::</span><span class="kw">rdirichlet</span>(<span class="dv">10000</span>, kw.alpha) <span class="co">#draw prior samples </span>
+p_post_inf &lt;-<span class="st"> </span>jags.inf<span class="op">$</span>BUGSoutput<span class="op">$</span>sims.list<span class="op">$</span>p.global</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hell_out_inf &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>source<span class="op">$</span>n.sources, <span class="cf">function</span>(i) <span class="kw">hellinger</span>(p_prior_inf[,i], p_post_inf[,i])<span class="op">$</span>hdist_disc)</code></pre></div>
+<pre><code>## Warning in sqrt(1 - integrate(fx1, minx, maxx)$value): NaNs produced
+
+## Warning in sqrt(1 - integrate(fx1, minx, maxx)$value): NaNs produced</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">kl_out_inf &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>source<span class="op">$</span>n.sources, <span class="cf">function</span>(i) <span class="kw">kldiv</span>(p_prior_inf[,i], p_post_inf[,i])<span class="op">$</span>kd)
+info_df &lt;-<span class="st"> </span><span class="kw">cbind</span>(info_df, 
+                 <span class="kw">data.frame</span>(
+                      <span class="dt">hellinger_inf =</span> <span class="kw">unlist</span>(hell_out_inf),
+                      <span class="dt">KLD_inf =</span> <span class="kw">unlist</span>(kl_out_inf)))
+info_df</code></pre></div>
+<pre><code>##   source_names hellinger      KLD hellinger_inf   KLD_inf
+## 1      Chinook 0.5647238 4.272721     0.8087594 9.0235405
+## 2         Chum 0.4963925 3.322687     0.2779481 0.8044662
+## 3         Coho 0.3477712 1.280238     0.1235578 0.2081266
+## 4      Sockeye 0.3596649 1.536300     0.1229399 0.1905334
+## 5    Steelhead 0.4419559 1.786828     0.7518839 7.7906642</code></pre>
+<p>The warning about NA’s comes from the prior for some groups being near zero, so the continuous version of the Hellinger stat isn’t able to be calculated. We are using the discrete version though, so its no problem to us.</p>
+<p>So with the informed priors the Hellinger has increased for Chinook and Steelhead and decreased for the others.</p>
+<p>Remember that the information criteria just measure the distance from the prior. So if our data just confirm the informed priors, or there isn’t enough data to overcome the informed priors, then the information criteria will be near zero. In this case we have only two tracers and samples from 12 killer whales. The prior we used on Sockeye was very strong to zero consumption, so our result stays the same.</p>
+<p>The below plot shows the priors in red and posteriors in black for the model with informed priors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">density</span>(p_post_inf[,<span class="dv">1</span>]), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">main =</span> <span class="st">&quot;informed prior&quot;</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))
+<span class="kw">lines</span>(<span class="kw">density</span>(p_prior_inf[,<span class="dv">1</span>]), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>I haven’t plotted the informed Coho model because both the prior and posterior are a spikes near zero.</p>
+<p>You can clearly see the model has shifted the consumption of Coho downwards relative to the informed prior.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

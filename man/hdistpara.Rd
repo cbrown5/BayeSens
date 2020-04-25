@@ -49,4 +49,3 @@ few samples, e.g. <10 000. >100 000 would be ideal.
 \author{
 Christopher J. Brown christo.j.brown@gmail.com
 }
-

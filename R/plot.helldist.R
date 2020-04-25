@@ -3,7 +3,7 @@
 plot.helldist <- function(helldist){
 
 		stopifnot(class(helldist) == 'helldist')
-		ymax <- max(c(helldist$densities$d1$y, helldist$densities$d2$y, helldist$histograms$h1$density, helldist$histograms$h2$density))		
+		ymax <- max(c(helldist$densities$d1$y, helldist$densities$d2$y, helldist$histograms$h1$density, helldist$histograms$h2$density), na.rm = TRUE)		
 			
 		par(mfrow = c(1,2))
 		plot(helldist$densities$d1,ylim = c(0, ymax), type = 'l', main = 'Fit - var1')

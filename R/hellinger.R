@@ -37,7 +37,7 @@
 #'small.
 #'
 #' In general these methods will be inaccurate if analysis is performed on
-#'too few samples, e.g. <10 000. >100 000 would be ideal.  
+#'too few samples, e.g. <10 000. >100 000 would be ideal.
 #' @author Christopher J. Brown christo.j.brown@gmail.com
 #' @rdname hellinger
 #' @export

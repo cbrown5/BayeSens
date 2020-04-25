@@ -1,0 +1,193 @@
+---
+title: "Example for isotope mixing models"
+author: "CJ Brown"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example for isotope mixing models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Example for isotope mixing models
+
+This vignette demonstrates how information criteria can be calculated for mixing models, specically models fit with [MixSIAR](https://cran.r-project.org/web/packages/MixSIAR/index.html). 
+
+In the article ["Quantifying learning in biotracer studies" (Brown,et al. Oecologia 2018)](https://link.springer.com/article/10.1007/s00442-018-4138-y) we describe how comparing priors and posteriors with information criteria is important to determine the influence of the data on the model. Priors for mixing models are all informative, even so called 'uninformative' priors. The prior for source contributions bounded between 0-1, and source contributions must sum to 1, so it can never be truly flat in that range. 
+
+We will apply the simple marginal information criteria from that paper to the Killer Whale example, see `vignette("killerwhale_ex")` in MixSIAR. 
+
+The killer whale example is a nice simple one with no covariates or random effects. If you have covariates or random effects, you'll need to be careful to compare priors to posteriors at the same locations on the fixed/random effects. 
+
+It will be helpful to have some understanding of MixSIAR's data structures, because we need to find the posterior samples in the model output. 
+
+## Killer whale example  
+
+First load the packages we need: 
+
+```{r}
+library(BayeSens)
+library(MixSIAR)
+```
+
+Now load the data (this is verbatim from the Killer whale example). 
+
+```{r}
+mix.filename <- system.file("extdata", "killerwhale_consumer.csv", package = "MixSIAR")
+
+mix <- load_mix_data(filename=mix.filename,
+                     iso_names=c("d13C","d15N"),
+                     factors=NULL,
+                     fac_random=NULL,
+                     fac_nested=NULL,
+                     cont_effects=NULL)
+
+
+source.filename <- system.file("extdata", "killerwhale_sources.csv", package = "MixSIAR")
+
+source <- load_source_data(filename=source.filename,
+                           source_factors=NULL,
+                           conc_dep=FALSE,
+                           data_type="means",
+                           mix)
+
+discr.filename <- system.file("extdata", "killerwhale_discrimination.csv", package = "MixSIAR")
+
+discr <- load_discr_data(filename=discr.filename, mix)
+```
+
+## Draw samples from the prior 
+
+Let's draw samples from the prior. You can also plot this with MixSIAR's `plot_prior` function, but we need a matrix of the samples for calculating info criteria later. 
+
+```{r}
+alpha <- rep(1, source$n.sources) #default prior values
+p_prior <- MCMCpack::rdirichlet(10000, alpha) #draw prior samples 
+```
+
+Let's plot just the prior for the first source (since they are all the same in this case)
+
+```{r fig.width=8}
+#Plot histogram and density (same data, different ways to view it )
+par(mfrow = c(1,2))
+hist(p_prior[,1], 20, main = source$source_names[1])
+plot(density(p_prior[,1]), main = source$source_names[1])
+abline(v = 1/source$n.sources)
+```
+
+As you can see the default prior clearly isn't 'uninformative' because it is centred around 1/number of sources (in fact it has mean 1 over the number of sources). It might be better called the 'uninformed' (by the user) prior. This means the prior will have a lower mean the more sources you include in the model. 
+
+## Run the model 
+
+This is verbatim from the Killer Whales example. 
+
+```{r}
+model_filename <- "MixSIAR_model_kw_uninf.txt"   # Name of the JAGS model file
+resid_err <- TRUE
+process_err <- TRUE
+write_JAGS_model(model_filename, resid_err, process_err, mix, source)
+jags.uninf <- run_model(run="test",mix,source,discr,model_filename,alpha.prior = alpha, resid_err, process_err)
+```
+I've used the test run mode here just to speed things up for the example. 
+
+You should absolutely use long chains (e.g. `run = "long"`) when calculating info criteria. They are quite sensitive to the number of MCMC samples if there are few samples. We need enough samples to get a good idea of the posteriors full shape. 
+
+If you get errors below (e.g. about 'extremely bad integrand') that means you haven't used enough samples to properly fill out the posterior.
+
+## Extract samples 
+
+Here's where it helps to have some idea of how MixSIAR structures outputs. We need to find the posterior samples. You can dig around using `str(jags.uninf)`. I did that and found the samples under `jags.uninf$BUGSoutput` as below: 
+
+```{r}
+p_post <- jags.uninf$BUGSoutput$sims.list$p.global
+```
+
+Now we have a matrix of prior samples and a matrix of posterior samples we can just compare them with the `hellinger` or `kldiv` (Kullback-Leibler divergence) functions from `BayeSens`. I'll compare just the first source (Chinook salmon). 
+
+```{r}
+hellinger(p_prior[,1], p_post[,1])
+kldiv(p_prior[,1], p_post[,1])
+```
+
+We'd like to know what the info criteria are for all sources, so we could manually select columns to compare, or just use some sort of iterating function to do them all at once. Here I use `lapply` and put them into a dataframe: 
+
+```{r}
+hell_out <- lapply(1:source$n.sources, function(i) hellinger(p_prior[,i], p_post[,i])$hdist_disc)
+kl_out <- lapply(1:source$n.sources, function(i) kldiv(p_prior[,i], p_post[,i])$kd)
+info_df <- data.frame(source_names = source$source_names, 
+                      hellinger = unlist(hell_out),
+                      KLD = unlist(kl_out))
+info_df
+```
+
+Hellinger values near 0 are very similar to the priors, Hellinger values near 1 are very different to the priors. The KLD ranges from >0 to infinity, so greater values indicate greater differences from the prior. So these results indicate to us that the model and data are not very informative about Coho, but much more informative about Chinook. To interpret why this is you should plot the priors and posteriors. 
+
+You can use `output_JAGS` to do this. We will do it ourselves, just to practice data wrangling. For Chinook and Coho: 
+
+```{r fig.width=8}
+par(mfrow = c(1,2))
+plot(density(p_post[,1]), main = source$source_names[1])
+lines(density(p_prior[,1]), col = "red")
+abline(v = 1/source$n.sources, lty = 2)
+
+plot(density(p_post[,3]), main = source$source_names[3])
+lines(density(p_prior[,3]), col = "red")
+abline(v = 1/source$n.sources, lty = 2)
+```
+
+It is pretty clear that contributions for Chinook have shifted higher, whereas the data doesn't give us much reason to believe Coho are any more important than the prior suggested. 
+
+Note that you can also get high information criteria stats if the posterior mean stays the same as the prior's mean, but the distribution changes shape (e.g. gets thinner). For instance, if the data were strongly informative that Coho were not an important food source, then we could have the same posterior mean of 0.2, but the uncertainty intervals would be much narrower around 0.2 than in the prior. 
+
+## Informative priors 
+
+The killer whale example also gives a model fit with informed priors. Here's the code verbatim from MixSIAR: 
+
+```{r}
+kw.alpha <- c(10,1,0,0,3)
+kw.alpha <- kw.alpha*length(kw.alpha)/sum(kw.alpha)
+kw.alpha[which(kw.alpha==0)] <- 0.01
+model_filename <- "MixSIAR_model_kw_inf.txt"  
+resid_err <- TRUE
+process_err <- TRUE
+write_JAGS_model(model_filename, resid_err, process_err, mix, source)
+jags.inf <- run_model(run="test",mix,source,discr,model_filename,alpha.prior=kw.alpha, resid_err, process_err)
+```
+
+The only extra step we need to do now is draw samples from the prior and posteriors:
+
+```{r}
+p_prior_inf <- MCMCpack::rdirichlet(10000, kw.alpha) #draw prior samples 
+p_post_inf <- jags.inf$BUGSoutput$sims.list$p.global
+```
+
+
+```{r}
+hell_out_inf <- lapply(1:source$n.sources, function(i) hellinger(p_prior_inf[,i], p_post_inf[,i])$hdist_disc)
+kl_out_inf <- lapply(1:source$n.sources, function(i) kldiv(p_prior_inf[,i], p_post_inf[,i])$kd)
+info_df <- cbind(info_df, 
+                 data.frame(
+                      hellinger_inf = unlist(hell_out_inf),
+                      KLD_inf = unlist(kl_out_inf)))
+info_df
+```
+
+The warning about NA's comes from the prior for some groups being near zero, so the continuous version of the Hellinger stat isn't able to be calculated. We are using the discrete version though, so its no problem to us. 
+
+So with the informed priors the Hellinger has increased for Chinook and Steelhead and decreased for the others. 
+
+Remember that the information criteria just measure the distance from the prior. So if our data just confirm the informed priors, or there isn't enough data to overcome the informed priors, then the information criteria will be near zero. In this case we have only two tracers and samples from 12 killer whales. The prior we used on Sockeye was very strong to zero consumption, so our result stays the same. 
+
+The below plot shows the priors in red and posteriors in black for the  model with informed priors. 
+
+```{r fig.width=8}
+
+plot(density(p_post_inf[,1]), lty = 2, main = "informed prior", xlim = c(0,1))
+lines(density(p_prior_inf[,1]), lty = 2, col = "red")
+
+```
+
+I haven't plotted the informed Coho model because both the prior and posterior are a spikes near zero. 
+
+You can clearly see the model has shifted the consumption of Coho downwards relative to the informed prior. 
+

@@ -1,13 +1,15 @@
 Package: BayeSens
 Type: Package
 Title: Prior sensitivity analysis for Bayesian MCMC models
-Version: 1.0
-Date: 2016-09-19
+Version: 1.1
+Date: 2020-04-25
 Author: Christopher J. Brown
-Maintainer: CJ Brown <christo.j.brown@gmail.com>
+Maintainer: CJ Brown <chris.brown@griffith.edu.au>
 Description: Calculate Hellinger distances on MCMC chains, calculate posterior shrinkage.
 License: MIT + file LICENSE
-RoxygenNote: 5.0.1
+RoxygenNote: 7.0.2
+Requires: MASS
 Suggests: knitr,
-    rmarkdown
+    rmarkdown,
+    MixSIAR
 VignetteBuilder: knitr
