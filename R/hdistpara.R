@@ -1,6 +1,6 @@
 #' Parametric estimation of the Hellinger distance between two random variates
 #'
-#' @Usage hdistpara(x1, x2 = NULL, params = NULL, densfun = 'normal')
+#' @usage hdistpara(x1, x2 = NULL, params = NULL, densfun = 'normal')
 #'
 #' @param x1 A \code{numeric} random variate of draws from the first
 #' distribution
@@ -8,12 +8,12 @@
 #'  distribution.
 #' @param params An optional \code{numeric} of two parameters giving the
 #' parameters for the density function.
-#' @param minx A \code{character} giving the density function to fit to both
+#' @param densfun A \code{character} giving the density function to fit to both
 #'  variates. Currently only "normal" and "beta" are supported.
 #'
 #' @return A helldistp object containing approximate Hellinger distances and
 #'  fitted density kernals.
-#' \item{hdist}{Estimate of Hellinger distance}
+#' \code{hdist}{Estimate of Hellinger distance}
 #'
 #' @details Hellinger distance is approximated by fitting distributions using
 #'  \code{MASS::fitdistr} and then calculating the exact Hellinger distance
@@ -25,7 +25,7 @@
 #' (ie \code{c(mean, sd)}) in that order for 'normal' density and a and
 #' b for the beta distribution (ie \code{c(a, b)}) in that order.
 #' '
-#' Class \item{helldistp} has a plot method that can be used to compared
+#' Class \code{helldistp} has a plot method that can be used to compared
 #' the discrete and continuous distribution fits. It is recommended to
 #' visually check distribution fits, particularly if the number of random
 #' variates is small.

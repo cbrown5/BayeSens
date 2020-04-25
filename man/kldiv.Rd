@@ -4,14 +4,8 @@
 \alias{kldiv}
 \title{Estimate the Kullback-Leibler divergence between two random variates}
 \usage{
-kldiv(
-  x1,
-  x2,
-  nbreaks = 100,
-  minx = min(c(x1, x2)),
-  maxx = max(c(x1, x2)),
-  small = 0.01
-)
+kldiv(x1, x2, nbreaks = 100, minx = min(c(x1, x2)),
+maxx = max(c(x1, x2)), small = 0.01)
 }
 \arguments{
 \item{x1}{A \code{numeric} random variate of draws from the posterior
@@ -26,13 +20,15 @@ discrete distribution into}
 \item{minx}{A single \code{numeric} giving the lower bound of integration}
 
 \item{maxx}{A single \code{numeric} giving the upper bound of integration}
+
+\item{small}{small number added to histogram counts to prevent division by zero}
 }
 \value{
 A helldist object containing approximate Hellinger distances and
 fitted density kernals.
-\item{hdist_disc}{Estimate of Hellinger distance using discrete approximation
+\code{hdist_disc}{Estimate of Hellinger distance using discrete approximation
 of the distributions}
-\item{hdist_cont}{Estimate of Hellinger distance using continous
+\code{hdist_cont}{Estimate of Hellinger distance using continous
 approximation
 of distributions}
 }

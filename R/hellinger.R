@@ -1,6 +1,6 @@
 #' Estimate the Hellinger distance between two random variates
 #'
-#' @Usage hellinger(x1, x2, nbreaks = 100, minx = min(c(x1, x2)),
+#' @usage hellinger(x1, x2, nbreaks = 100, minx = min(c(x1, x2)),
 #' maxx = max(c(x1, x2)))
 #'
 #' @param x1 A \code{numeric} random variate of draws from the first distribution
@@ -29,7 +29,7 @@
 #'however, it may give poor approximations for multi-modal distributions.
 #'
 #'Continuous integration may return NaN if the distributions are near identical.
-#' Class \item{helldist} has a plot method that can be used to compared the
+#' Class \code{helldist} has a plot method that can be used to compared the
 #'discrete and continuous distribution fits.
 #'
 #'It is recommended to visually

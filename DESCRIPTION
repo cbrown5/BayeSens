@@ -8,8 +8,12 @@ Maintainer: CJ Brown <chris.brown@griffith.edu.au>
 Description: Calculate Hellinger distances on MCMC chains, calculate posterior shrinkage.
 License: MIT + file LICENSE
 RoxygenNote: 7.0.2
-Requires: MASS
-Suggests: knitr,
+Imports: 
+    MASS,
+    stats
+Suggests: 
+    knitr,
     rmarkdown,
-    MixSIAR
+    MixSIAR,
+    MCMCpack
 VignetteBuilder: knitr

@@ -1,6 +1,6 @@
 #' Clone a dataframe
 #'
-#' @Usage dataclone(dat, K)
+#' @usage dataclone(dat, K)
 #'
 #' @param dat A \code{data.frame} of the data
 #' @param K A \code{numeric} Giving the the number of clones to create.
